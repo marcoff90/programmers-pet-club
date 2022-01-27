@@ -48,18 +48,18 @@
         <p class="card-tex text-light" th:text="${pet.getDescription()}">Info about type of pet</p>
       </div>
       <div class="card-body text-center text-light">
-        <form>
+        <form th:action="${'/nutritioncenter'}" th:method="post">
           <div class="form-group my-2">
-            <label for="dropdown" class="mb-2">Select new food</label>
-            <select class="form-control text-dark" id="dropdown">
+            <label for="food" class="mb-2">Select new food</label>
+            <select class="form-control text-dark" id="food" name="food">
               <option>Food 1</option>
               <option>Food 2</option>
               <option>Food 3</option>
               <option>Food 4</option>
               <option>Food 5</option>
             </select>
-            <label for="dropdown2" class="mb-2">Select new drink</label>
-            <select class="form-control" id="dropdown2">
+            <label for="drink" class="mb-2">Select new drink</label>
+            <select class="form-control" id="drink" name="drink">
               <option>Drink 1</option>
               <option>Drink 2</option>
               <option>Drink 3</option>

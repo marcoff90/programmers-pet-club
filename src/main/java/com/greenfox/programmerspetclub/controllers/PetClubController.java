@@ -83,6 +83,13 @@ public class PetClubController {
     return "nutritionstore";
   }
 
+  @PostMapping("/nutritioncenter")
+  public String updateNutrition(Model model, @RequestParam String food, @RequestParam String drink) {
+    petService.getCurrentPet().setDrink(drink);
+    petService.getCurrentPet().setFood(food);
+    return "redirect:information";
+  }
+
   @GetMapping("/tricks")
   public String showTricks(Model model) {
     model.addAttribute("pet", petService.getCurrentPet());

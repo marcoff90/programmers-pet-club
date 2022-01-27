@@ -70,6 +70,9 @@
         <li class="list-group-item text-light bg-dark border-light" th:text="${pet.getFood()}">
           Current food
         </li>
+        <li class="list-group-item text-light bg-dark border-light" th:text="${pet.getDrink()}">
+          Current food
+        </li>
         <div th:each="trick : ${pet.getTricks()}">
           <li class="list-group-item text-light bg-dark" th:text="${trick}">Known tricks</li>
         </div>
