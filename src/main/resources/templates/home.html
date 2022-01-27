@@ -31,13 +31,13 @@
           <a  class="nav-link mx-2" th:href="information">Information</a>
         </li>
         <li th:if="${isInDatabase}" class="nav-item">
-          <a class="nav-link mx-2" href="nutritioncenter.html">Nutrition Center</a>
+          <a class="nav-link mx-2" th:href="nutritioncenter">Nutrition Center</a>
         </li>
         <li th:if="${isInDatabase}" class="nav-item">
-          <a class="nav-link mx-2" href="trickcenter.html">Trick Center</a>
+          <a class="nav-link mx-2" th:href="tricks">Trick Center</a>
         </li>
         <li th:if="${isInDatabase}" class="nav-item">
-          <a class="nav-link mx-2" href="actionhistory.html">Action History</a>
+          <a class="nav-link mx-2" th:href="history">Action History</a>
         </li>
       </ul>
     </div>

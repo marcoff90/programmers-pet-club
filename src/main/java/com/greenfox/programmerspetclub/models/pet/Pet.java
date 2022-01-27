@@ -10,6 +10,7 @@ public abstract class Pet {
   protected String drink;
   protected String description;
   protected List<String> tricks;
+  protected List<String> history;
   protected String image;
 
   public Pet(String name, String food, String drink) {
@@ -17,6 +18,7 @@ public abstract class Pet {
     this.food = food;
     this.drink = drink;
     this.tricks = new ArrayList<>();
+    this.history = new ArrayList<>();
   }
 
   public String getName() {
@@ -39,8 +41,18 @@ public abstract class Pet {
     return image;
   }
 
+  public List<String> getHistory() {
+    if (history.isEmpty()) {
+      history.add(name + " doesn't have any history yet");
+    }
+    return history.size() > 1 ? history.subList(1, history.size()) : history;
+  }
+
   public List<String> getTricks() {
-    return tricks;
+    if (tricks.isEmpty()) {
+      tricks.add(name + " doesn't know any tricks yet");
+    }
+    return tricks.size() > 1 ? tricks.subList(1, tricks.size()) : tricks;
   }
 
   public void setName(String name) {
@@ -57,5 +69,9 @@ public abstract class Pet {
 
   public void addTrick(String newTrick) {
     tricks.add(newTrick);
+  }
+
+  public void addHistory(String history) {
+    this.history.add(history);
   }
 }

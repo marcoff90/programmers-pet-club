@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 public interface PetService {
 
+  public void setCurrentPet(Pet pet);
+  public Pet getCurrentPet();
   public List<Pet> getPets();
   public boolean addPet(Pet pet);  // adds Pet to the list, returns boolean for alert (created)
   public boolean updateFoodAndDrink(Pet pet); // updates pet either food and drink, returns boolean for alert

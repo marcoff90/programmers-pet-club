@@ -25,16 +25,19 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
         <li class="nav-item active">
-          <a class="nav-link mx-2" th:href="information">Information</a>
+          <a class="nav-link mx-2" th:href="create">Create a Pet</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link mx-2" href="nutritionstore.html">Nutrition store</a>
+        <li th:if="${isInDatabase}" class="nav-item">
+          <a  class="nav-link mx-2" th:href="information">Information</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link mx-2" href="trickcenter.html">Trick Center</a>
+        <li th:if="${isInDatabase}" class="nav-item">
+          <a class="nav-link mx-2" th:href="nutritioncenter">Nutrition Center</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link mx-2" href="actionhistory.html">Action History</a>
+        <li th:if="${isInDatabase}" class="nav-item">
+          <a class="nav-link mx-2" th:href="tricks">Trick Center</a>
+        </li>
+        <li th:if="${isInDatabase}" class="nav-item">
+          <a class="nav-link mx-2" th:href="history">Action History</a>
         </li>
       </ul>
     </div>

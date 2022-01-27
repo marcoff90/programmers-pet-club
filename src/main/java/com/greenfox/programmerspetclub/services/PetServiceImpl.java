@@ -10,10 +10,21 @@ import org.springframework.stereotype.Service;
 public class PetServiceImpl implements PetService {
 
   private List<Pet> pets;
+  private Pet currentPet;
 
   public PetServiceImpl() {
     this.pets = new ArrayList<>();
     pets.add(new Doggo("Lucas", "Ham", "Cola"));
+  }
+
+  @Override
+  public void setCurrentPet(Pet pet) {
+    this.currentPet = pet;
+  }
+
+  @Override
+  public Pet getCurrentPet() {
+    return currentPet;
   }
 
   public List<Pet> getPets() {

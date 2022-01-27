@@ -19,22 +19,22 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <a class="ml-1 navbar-brand" href="#"> </a>
-    <a class="ml-1 navbar-brand" href="index.html"><img src="img/logo.png" width="30" height="30"
+    <a class="ml-1 navbar-brand" th:href="home"><img src="img/logo.png" width="30" height="30"
                                                         class="d-inline-block align-top" alt="">Programmer's Pet Club</a>
 
     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-        <li class="nav-item active">
-          <a class="nav-link mx-2" href="information.html">Information</a>
+        <li class="nav-item">
+          <a class="nav-link mx-2" th:href="information">Information</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link mx-2" href="nutritionstore.html">Nutrition store</a>
+          <a class="nav-link mx-2" th:href="nutritioncenter">Nutrition Center</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link mx-2" href="trickcenter.html">Trick Center</a>
+          <a class="nav-link mx-2" th:href="tricks">Trick Center</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link mx-2" href="actionhistory.html">Action History</a>
+          <a class="nav-link mx-2" th:href="history">Action History</a>
         </li>
       </ul>
     </div>
@@ -42,10 +42,10 @@
 
   <div class="row border border-light my-2 g-1 rounded bg-light text-center justify-content-center">
     <div class="card my-2 py-2 bg-dark col-xxl-6 col-xl-6 col-lg-6 col-md-6">
-      <img class="card-img-top" src="img/IMG_0672.JPG" alt="Card image cap">
+      <img class="card-img-top" th:src="@{${'/img/' + pet.getImage()}}" alt="Card image cap">
       <div class="card-body border border-light mt-2 rounded">
-        <h5 class="card-title text-light"><ins>Pet's name</ins></h5>
-        <p class="card-tex text-light">Info about type of pet</p>
+        <h5 class="card-title text-light"><ins th:text="${pet.getName()}">Pet's name</ins></h5>
+        <p class="card-tex text-light" th:text="${pet.getDescription()}">Info about type of pet</p>
       </div>
       <div class="card-body text-center text-light">
         <form>
@@ -58,8 +58,8 @@
               <option>Food 4</option>
               <option>Food 5</option>
             </select>
-            <label for="exampleFormControlSelect1" class="mb-2">Select new drink</label>
-            <select class="form-control" id="dropdown">
+            <label for="dropdown2" class="mb-2">Select new drink</label>
+            <select class="form-control" id="dropdown2">
               <option>Drink 1</option>
               <option>Drink 2</option>
               <option>Drink 3</option>
