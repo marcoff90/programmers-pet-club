@@ -42,8 +42,15 @@ public class PetClubController {
   public String login(@RequestParam String name) {
     // TODO send boolean to redirect to create in order to show the alert pet not found
     if (petService.isInDatabase(name)) {
+      if (petService.getCurrentPet() != null) {
+        Optional<Pet> matchingPet = petService.getPets().stream().filter(pet -> pet.getName().equalsIgnoreCase(name)).findFirst();
+        Pet pet = matchingPet.orElse(null);
+        petService.setCurrentPet(pet);
+        // * if user is already logged in and is logging in with another pet, we overwrite the current pet for the new one
+      }
       return "redirect:information?name=" + name;
     } else {
+
       return "redirect:create";
     }
 
@@ -54,7 +61,7 @@ public class PetClubController {
   @GetMapping("/information")
   public String showInformation(Model model, @RequestParam(required = false) String name) {
 
-    //TODO alerts booleans, if already logged in and wanna log in with another pet, set new pet in petservice
+    //TODO if already logged in and wanna log in with another pet, set new pet in petservice
     if (petService.getCurrentPet() == null) {
       Optional<Pet> matchingPet = petService.getPets().stream().filter(pet -> pet.getName().equalsIgnoreCase(name)).findFirst();
       Pet pet = matchingPet.orElse(null);
@@ -63,7 +70,6 @@ public class PetClubController {
 
       // * after first login the pet is set as a current pet which is the called through pet service
       // * in other methods and that way can easily be always rendered
-
     } else {
       model.addAttribute("pet", petService.getCurrentPet());
     }
@@ -72,6 +78,7 @@ public class PetClubController {
 
   @GetMapping("/create")
   public String showCreate(Model model) {
+    // TODO when user is logged in and trying to log with a new pet, with wrong name, change the value of boolean to false to show the alert not found
     shouldUserSeeTheMenu(model);
     return "create";
 
@@ -100,6 +107,7 @@ public class PetClubController {
     }
     petService.addPet(pet);
     petService.setCurrentPet(pet);
+    petService.getCurrentPet().setCreated(true);
 
     return "redirect:information";
 

@@ -1,6 +1,7 @@
 package com.greenfox.programmerspetclub.models.pet;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class Pet {
@@ -51,9 +52,9 @@ public abstract class Pet {
 
   public List<String> getHistory() {
     if (history.isEmpty()) {
-      history.add(name + " doesn't have any history yet");
+      return Arrays.asList(name + " doesn't have any history yet");
     }
-    return history.size() > 1 ? history.subList(1, history.size()) : history;
+    return history;
   }
 
   public List<String> getTricks() {
