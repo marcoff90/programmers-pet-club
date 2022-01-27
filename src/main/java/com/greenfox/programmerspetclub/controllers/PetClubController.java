@@ -1,7 +1,14 @@
 package com.greenfox.programmerspetclub.controllers;
 
+import com.greenfox.programmerspetclub.models.pet.Doggo;
+import com.greenfox.programmerspetclub.models.pet.Fox;
+import com.greenfox.programmerspetclub.models.pet.Paegas;
 import com.greenfox.programmerspetclub.models.pet.Pet;
+import com.greenfox.programmerspetclub.models.pet.Unicorn;
+import com.greenfox.programmerspetclub.models.pet.Wolf;
 import com.greenfox.programmerspetclub.services.PetService;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -71,15 +78,44 @@ public class PetClubController {
     // * if the user isn't logged in he doesn't see whole menu
   }
 
+  @PostMapping("/create")
+  public String store(Model model, @RequestParam String name, @RequestParam String type,
+      @RequestParam String food, @RequestParam String drink) {
+    Pet pet = null;
+    switch (type) {
+      case "Cute Fox" :
+        pet = new Fox(name, food, drink);
+        break;
+      case "Cute Wolf" : pet = new Wolf(name, food, drink);
+      break;
+      case "Cute Doggo" :
+        pet = new Doggo(name, food, drink);
+        break;
+      case "Cute Unicorn" :
+        pet = new Unicorn(name, food, drink);
+        break;
+      case "Paegas Unicorn" :
+        pet = new Paegas(name, food, drink);
+        break;
+    }
+    petService.addPet(pet);
+    petService.setCurrentPet(pet);
+
+    return "redirect:information";
+
+  }
+
   @GetMapping("/history")
   public String showHistory(Model model) {
     model.addAttribute("pet", petService.getCurrentPet());
+    resetBooleans();
     return "history";
   }
 
   @GetMapping("/nutritioncenter")
   public String showNutrition(Model model) {
     model.addAttribute("pet", petService.getCurrentPet());
+    resetBooleans();
     return "nutritionstore";
   }
 
@@ -87,13 +123,26 @@ public class PetClubController {
   public String updateNutrition(Model model, @RequestParam String food, @RequestParam String drink) {
     petService.getCurrentPet().setDrink(drink);
     petService.getCurrentPet().setFood(food);
+    petService.getCurrentPet().setFoodUpdated(true);
+    petService.getCurrentPet().addHistory(getTimeAndDate() + " " + petService.getCurrentPet().getName() +
+        " changed his food & drink into " + food + " & " + drink);
     return "redirect:information";
   }
 
   @GetMapping("/tricks")
   public String showTricks(Model model) {
     model.addAttribute("pet", petService.getCurrentPet());
+    resetBooleans();
     return "tricks";
+  }
+
+  @PostMapping("/tricks")
+  public String updateTrick(Model model, @RequestParam String newTrick) {
+    petService.getCurrentPet().addTrick(newTrick);
+    petService.getCurrentPet().setTricksUpdated(true);
+    petService.getCurrentPet().addHistory(getTimeAndDate() + " " + petService.getCurrentPet().getName() +
+        " has learned to " + newTrick);
+    return "redirect:information";
   }
 
   private Model shouldUserSeeTheMenu(Model model) {
@@ -102,8 +151,17 @@ public class PetClubController {
     } else {
       model.addAttribute("isInDatabase", petService.isInDatabase(null));
     }
-
     return model;
   }
 
+  private void resetBooleans() {
+    petService.getCurrentPet().setCreated(false);
+    petService.getCurrentPet().setHasntBeenFound(false);
+    petService.getCurrentPet().setTricksUpdated(false);
+    petService.getCurrentPet().setFoodUpdated(false);
+  }
+
+  private String getTimeAndDate() {
+    return new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+  }
 }

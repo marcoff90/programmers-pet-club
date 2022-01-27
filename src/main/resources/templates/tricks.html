@@ -48,10 +48,10 @@
         <p class="card-tex text-light" th:text="${pet.getDescription()}">Info about type of pet</p>
       </div>
       <div class="card-body text-center text-light">
-        <form>
+        <form th:action="${'/tricks'}" th:method="post">
           <div class="form-group my-2">
-            <label for="dropdown" class="mb-2">Teach trick</label>
-            <select class="form-control text-dark" id="dropdown">
+            <label for="trick" class="mb-2">Teach trick</label>
+            <select class="form-control text-dark" id="trick" name="newTrick">
               <option>Trick 1</option>
               <option>Trick 2</option>
               <option>Trick 3</option>

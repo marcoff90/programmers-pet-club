@@ -38,18 +38,6 @@ public class PetServiceImpl implements PetService {
   }
 
   @Override
-  public boolean updateFoodAndDrink(Pet pet) {
-    // TODO find in list, set the parameters
-    return false;
-  }
-
-  @Override
-  public boolean updateTricks(Pet pet) {
-    // TODO find in list, set the parameters
-    return false;
-  }
-
-  @Override
   public boolean isInDatabase(String name) {
     if (name == null) {
       return false;

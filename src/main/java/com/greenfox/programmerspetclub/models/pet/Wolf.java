@@ -11,9 +11,9 @@ public class Wolf extends Pet {
   }
 
   private String chooseImg() {
-    String[] pics = {"src/main/resources/static/img/IMG_0666.JPG", "src/main/resources/static/img/IMG_0667.JPG",
-        "src/main/resources/static/img/IMG_0668.JPG", "src/main/resources/static/img/IMG_0669.JPG",
-        "src/main/resources/static/img/IMG_0670.JPG"};
+    String[] pics = {"IMG_0666.JPG", "IMG_0667.JPG",
+        "IMG_0668.JPG", "IMG_0669.JPG",
+        "IMG_0670.JPG"};
     Random rand = new Random();
     return pics[rand.nextInt(pics.length)];
   }

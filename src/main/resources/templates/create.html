@@ -44,7 +44,7 @@
   </nav>
 
   <div class="row text-center justify-content-center mx-auto">
-    <div class="alert alert-danger" role="alert">
+    <div class="alert alert-danger" role="alert" th:unless="${isInDatabase}">
       We didn't find your pet in our database :(<br>Don't worry, you can make a new one!
     </div>
   </div>
@@ -59,33 +59,33 @@
 
   <div class="row border border-light mb-2 g-1 rounded bg-light justify-content-center">
     <div class="col-10">
-      <form>
+      <form th:action="${'/create'}" th:method="post">
         <div class="form-group my-3 text-center">
-          <label for="foxname" class="text-success mb-2"><strong>Enter a name of your new
+          <label for="name" class="text-success mb-2"><strong>Enter a name of your new
             pet!</strong></label>
-          <input type="text" class="form-control" id="foxname" aria-describedby="emailHelp"
+          <input type="text" class="form-control" id="name" name="name"
                  placeholder="What will be the name of your amazing pet?">
-          <label for="dropdown" class="text-success my-2"><strong>Choose the type of your new
+          <label for="type" class="text-success my-2"><strong>Choose the type of your new
             pet!</strong></label>
-          <select class="form-control text-secondary" id="dropdown">
+          <select class="form-control text-secondary" id="type" name="type">
             <option>Cute Fox</option>
             <option>Cute Wolf</option>
             <option>Cute Doggo</option>
             <option>Cute Unicorn</option>
             <option>Paegas Unicorn</option>
           </select>
-          <label for="dropdown" class="text-success my-2"><strong>Choose first food for
+          <label for="food" class="text-success my-2"><strong>Choose first food for
             your new pet!</strong></label>
-          <select class="form-control text-secondary" id="dropdown">
+          <select class="form-control text-secondary" id="food" name="food">
             <option>Food 1</option>
             <option>Food 2</option>
             <option>Food 3</option>
             <option>Food 4</option>
             <option>Food 5</option>
           </select>
-          <label for="dropdown" class="text-success my-2"><strong>Now choose it's first
+          <label for="drink" class="text-success my-2"><strong>Now choose it's first
             drink!</strong></label>
-          <select class="form-control text-secondary" id="dropdown">
+          <select class="form-control text-secondary" id="drink" name="drink">
             <option>Drink 1</option>
             <option>Drink 2</option>
             <option>Drink 3</option>
