@@ -44,7 +44,7 @@
   </nav>
 
   <div class="row text-center justify-content-center mx-auto">
-    <div class="alert alert-danger" role="alert" th:unless="${isInDatabase}">
+    <div class="alert alert-danger" role="alert" th:if="${isAlertVisible}">
       We didn't find your pet in our database :(<br>Don't worry, you can make a new one!
     </div>
   </div>

@@ -1,8 +1,6 @@
 package com.greenfox.programmerspetclub.controllers;
 
-import com.greenfox.programmerspetclub.models.pet.*;
 import com.greenfox.programmerspetclub.services.PetService;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,11 +62,14 @@ public class PetClubController {
   public String showCreate(Model model, @RequestParam(required = false) String name) {
     // TODO if the user has tried to log in with the wrong name, set the wrong name as a placeholder
     // TODO create a boolean for that
-    // TODO dont show the alert when not logged in and directly clicking on create a pet
     if (name == null) {
+      model.addAttribute("isAlertVisible", false);
+      // * when the name isn't passed, the alert isn't visible
       shouldUserSeeTheMenu(model);
       // * if the user isn't logged in he doesn't see whole menu
     } else if (!petService.isInDatabase(name)) {
+      model.addAttribute("isAlertVisible", true);
+      // * when the name is passed and is wrong, the alert is visible
       model.addAttribute("isInDatabase", petService.isInDatabase(null));
       // * when the user is already logged in and trying to log in with another pet, but enters a wrong name, the alert shows
       // * up and the menu is no longer visible
