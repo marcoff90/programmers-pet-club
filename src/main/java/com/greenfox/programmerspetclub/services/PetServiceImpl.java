@@ -43,18 +43,19 @@ public class PetServiceImpl implements PetService {
     Pet pet = null;
     String nameWithUpperCase = name.substring(0, 1).toUpperCase() + name.substring(1);
     switch (type) {
-      case "Cute Fox" :
+      case "Cute Fox":
         pet = new Fox(nameWithUpperCase, food, drink);
         break;
-      case "Cute Wolf" : pet = new Wolf(nameWithUpperCase, food, drink);
+      case "Cute Wolf":
+        pet = new Wolf(nameWithUpperCase, food, drink);
         break;
-      case "Cute Doggo" :
+      case "Cute Doggo":
         pet = new Doggo(nameWithUpperCase, food, drink);
         break;
-      case "Cute Unicorn" :
+      case "Cute Unicorn":
         pet = new Unicorn(nameWithUpperCase, food, drink);
         break;
-      case "Paegas Unicorn" :
+      case "Paegas Unicorn":
         pet = new Paegas(nameWithUpperCase, food, drink);
         break;
     }

@@ -101,7 +101,7 @@ public class PetClubController {
 
   @PostMapping("/nutritioncenter")
   public String updateNutrition(Model model, @RequestParam String food, @RequestParam String drink) {
-    petService.updateFoodAndDrink(drink,food);
+    petService.updateFoodAndDrink(drink, food);
     return "redirect:information";
   }
 
