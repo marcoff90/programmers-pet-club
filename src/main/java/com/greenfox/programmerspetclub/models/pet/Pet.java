@@ -3,7 +3,9 @@ package com.greenfox.programmerspetclub.models.pet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import lombok.Data;
 
+@Data
 public abstract class Pet {
 
   protected String name;
@@ -28,26 +30,6 @@ public abstract class Pet {
     this.isCreated = false;
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public String getFood() {
-    return food;
-  }
-
-  public String getDrink() {
-    return drink;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public String getImage() {
-    return image;
-  }
-
   public List<String> getHistory() {
     if (history.isEmpty()) {
       return Arrays.asList(name + " doesn't have any history yet");
@@ -62,48 +44,11 @@ public abstract class Pet {
     return tricks.size() > 1 ? tricks.subList(1, tricks.size()) : tricks;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public void setFood(String food) {
-    this.food = food;
-  }
-
-  public void setDrink(String drink) {
-    this.drink = drink;
-  }
-
   public void addTrick(String newTrick) {
     tricks.add(newTrick);
   }
-
+//
   public void addHistory(String history) {
     this.history.add(history);
   }
-
-  public boolean isFoodUpdated() {
-    return this.isFoodUpdated;
-  }
-
-  public boolean isTricksUpdated() {
-    return this.isTricksUpdated;
-  }
-
-  public boolean isCreated() {
-    return this.isCreated;
-  }
-
-  public void setFoodUpdated(boolean isFoodUpdated) {
-    this.isFoodUpdated = isFoodUpdated;
-  }
-
-  public void setTricksUpdated(boolean isTricksUpdated) {
-    this.isTricksUpdated = isTricksUpdated;
-  }
-
-  public void setCreated(boolean isCreated) {
-    this.isCreated = isCreated;
-  }
-
 }

@@ -20,7 +20,6 @@ public class PetClubController {
 
   @GetMapping("/home")
   public String index(Model model) {
-
     shouldUserSeeTheMenu(model);
     return "home";
 
