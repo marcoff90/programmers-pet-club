@@ -4,8 +4,7 @@ public class Doggo extends Pet {
 
   public Doggo(String name, String food, String drink) {
     super(name, food, drink);
-    this.description = name + " is a good boi, he loves to play fetch, eat his " + food +
-        " and stare at his owner while he's coding this page!";
+    this.description = name + " is a good boi, he loves to play fetch and stare at his owner while he's coding this page!";
     this.image = chooseImg();
   }
 

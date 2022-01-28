@@ -108,7 +108,7 @@ public class PetServiceImpl implements PetService {
 
   private String getTimeAndDate() {
     String date = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-    return date.substring(6, 8) + "." + date.substring(5, 7) + "." + date.substring(0, 4) + " at " + date.substring(9, 11) + ":" + date.substring(
+    return date.substring(6, 8) + "." + date.substring(4, 6) + "." + date.substring(0, 4) + " at " + date.substring(9, 11) + ":" + date.substring(
         11, 13);
   }
 }
