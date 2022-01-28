@@ -1,11 +1,6 @@
 package com.greenfox.programmerspetclub.controllers;
 
-import com.greenfox.programmerspetclub.models.pet.Doggo;
-import com.greenfox.programmerspetclub.models.pet.Fox;
-import com.greenfox.programmerspetclub.models.pet.Paegas;
-import com.greenfox.programmerspetclub.models.pet.Pet;
-import com.greenfox.programmerspetclub.models.pet.Unicorn;
-import com.greenfox.programmerspetclub.models.pet.Wolf;
+import com.greenfox.programmerspetclub.models.pet.*;
 import com.greenfox.programmerspetclub.services.PetService;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -43,15 +38,13 @@ public class PetClubController {
     // TODO send boolean to redirect to create in order to show the alert pet not found
     if (petService.isInDatabase(name)) {
       if (petService.getCurrentPet() != null) {
-        Optional<Pet> matchingPet = petService.getPets().stream().filter(pet -> pet.getName().equalsIgnoreCase(name)).findFirst();
-        Pet pet = matchingPet.orElse(null);
-        petService.setCurrentPet(pet);
+        petService.setCurrentPet(matchingPet(name));
         // * if user is already logged in and is logging in with another pet, we overwrite the current pet for the new one
       }
       return "redirect:information?name=" + name;
     } else {
 
-      return "redirect:create";
+      return "redirect:create?name=" + name;
     }
 
     // * if the name is found in the database, the user is redirected to information page of his pet
@@ -61,12 +54,9 @@ public class PetClubController {
   @GetMapping("/information")
   public String showInformation(Model model, @RequestParam(required = false) String name) {
 
-    //TODO if already logged in and wanna log in with another pet, set new pet in petservice
     if (petService.getCurrentPet() == null) {
-      Optional<Pet> matchingPet = petService.getPets().stream().filter(pet -> pet.getName().equalsIgnoreCase(name)).findFirst();
-      Pet pet = matchingPet.orElse(null);
-      model.addAttribute("pet", pet);
-      petService.setCurrentPet(pet);
+      model.addAttribute("pet", matchingPet(name));
+      petService.setCurrentPet(matchingPet(name));
 
       // * after first login the pet is set as a current pet which is the called through pet service
       // * in other methods and that way can easily be always rendered
@@ -77,9 +67,13 @@ public class PetClubController {
   }
 
   @GetMapping("/create")
-  public String showCreate(Model model) {
+  public String showCreate(Model model, @RequestParam(required = false) String name) {
     // TODO when user is logged in and trying to log with a new pet, with wrong name, change the value of boolean to false to show the alert not found
-    shouldUserSeeTheMenu(model);
+    if (name == null) {
+      shouldUserSeeTheMenu(model);
+    } else if (!petService.isInDatabase(name)) {
+      model.addAttribute("isInDatabase", petService.isInDatabase(null));
+    }
     return "create";
 
     // * if the user isn't logged in he doesn't see whole menu
@@ -88,25 +82,7 @@ public class PetClubController {
   @PostMapping("/create")
   public String store(Model model, @RequestParam String name, @RequestParam String type,
       @RequestParam String food, @RequestParam String drink) {
-    Pet pet = null;
-    switch (type) {
-      case "Cute Fox" :
-        pet = new Fox(name, food, drink);
-        break;
-      case "Cute Wolf" : pet = new Wolf(name, food, drink);
-      break;
-      case "Cute Doggo" :
-        pet = new Doggo(name, food, drink);
-        break;
-      case "Cute Unicorn" :
-        pet = new Unicorn(name, food, drink);
-        break;
-      case "Paegas Unicorn" :
-        pet = new Paegas(name, food, drink);
-        break;
-    }
-    petService.addPet(pet);
-    petService.setCurrentPet(pet);
+    petService.addPet(type, food, drink, name);
     petService.getCurrentPet().setCreated(true);
 
     return "redirect:information";
@@ -163,6 +139,7 @@ public class PetClubController {
   }
 
   private void resetBooleans() {
+    // TODO add reseting to petservice as a method
     petService.getCurrentPet().setCreated(false);
     petService.getCurrentPet().setHasntBeenFound(false);
     petService.getCurrentPet().setTricksUpdated(false);
@@ -170,6 +147,14 @@ public class PetClubController {
   }
 
   private String getTimeAndDate() {
-    return new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+    String date = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+    return date.substring(6, 8) + "." + date.substring(5, 7) + "." + date.substring(0, 4) + " at " + date.substring(9, 11) + ":" + date.substring(
+        11, 13);
+  }
+
+  private Pet matchingPet(String name) {
+    // TODO as a method in petservice
+    Optional<Pet> matchingPet = petService.getPets().stream().filter(pet -> pet.getName().equalsIgnoreCase(name)).findFirst();
+    return matchingPet.orElse(null);
   }
 }
