@@ -16,7 +16,6 @@ public abstract class Pet {
   private boolean isFoodUpdated;
   private boolean isTricksUpdated;
   private boolean isCreated;
-  private boolean hasntBeenFound;
 
   public Pet(String name, String food, String drink) {
     this.name = name;
@@ -24,7 +23,6 @@ public abstract class Pet {
     this.drink = drink;
     this.tricks = new ArrayList<>();
     this.history = new ArrayList<>();
-    this.hasntBeenFound = false;
     this.isTricksUpdated = false;
     this.isFoodUpdated = false;
     this.isCreated = false;
@@ -96,10 +94,6 @@ public abstract class Pet {
     return this.isCreated;
   }
 
-  public boolean hasntBeenFound() {
-    return this.hasntBeenFound;
-  }
-
   public void setFoodUpdated(boolean isFoodUpdated) {
     this.isFoodUpdated = isFoodUpdated;
   }
@@ -112,7 +106,4 @@ public abstract class Pet {
     this.isCreated = isCreated;
   }
 
-  public void setHasntBeenFound(boolean hasntBeenFound) {
-    this.hasntBeenFound = hasntBeenFound;
-  }
 }

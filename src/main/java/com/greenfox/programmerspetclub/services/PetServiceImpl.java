@@ -41,24 +41,27 @@ public class PetServiceImpl implements PetService {
   @Override
   public void addPet(String type, String food, String drink, String name) {
     Pet pet = null;
+    String nameWithUpperCase = name.substring(0, 1).toUpperCase() + name.substring(1);
     switch (type) {
       case "Cute Fox" :
-        pet = new Fox(name.substring(0, 1).toUpperCase() + name.substring(1), food, drink);
+        pet = new Fox(nameWithUpperCase, food, drink);
         break;
-      case "Cute Wolf" : pet = new Wolf(name.substring(0, 1).toUpperCase() + name.substring(1), food, drink);
+      case "Cute Wolf" : pet = new Wolf(nameWithUpperCase, food, drink);
         break;
       case "Cute Doggo" :
-        pet = new Doggo(name.substring(0, 1).toUpperCase() + name.substring(1), food, drink);
+        pet = new Doggo(nameWithUpperCase, food, drink);
         break;
       case "Cute Unicorn" :
-        pet = new Unicorn(name.substring(0, 1).toUpperCase() + name.substring(1), food, drink);
+        pet = new Unicorn(nameWithUpperCase, food, drink);
         break;
       case "Paegas Unicorn" :
-        pet = new Paegas(name.substring(0, 1).toUpperCase() + name.substring(1), food, drink);
+        pet = new Paegas(nameWithUpperCase, food, drink);
         break;
     }
     pets.add(pet);
     this.currentPet = pet;
+    // * based on passed String type, the pet type is created, added to the list and set as a current pet -> when redirected to infomartion, the new
+    // * pet is displayed
   }
 
   @Override
@@ -89,7 +92,6 @@ public class PetServiceImpl implements PetService {
   @Override
   public void resetBooleans() {
     currentPet.setCreated(false);
-    currentPet.setHasntBeenFound(false);
     currentPet.setTricksUpdated(false);
     currentPet.setFoodUpdated(false);
   }
@@ -97,7 +99,9 @@ public class PetServiceImpl implements PetService {
   @Override
   public Pet matchingPet(String name) {
     Optional<Pet> matchingPet = pets.stream().filter(pet -> pet.getName().equalsIgnoreCase(name)).findFirst();
+    currentPet = matchingPet.orElse(null);
     return matchingPet.orElse(null);
+    // * when the user is logging in with pet, it checks if the pet is in the list and then sets it as a current pet
   }
 
   private String getTimeAndDate() {

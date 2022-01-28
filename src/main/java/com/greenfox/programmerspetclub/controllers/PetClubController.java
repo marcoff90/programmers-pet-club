@@ -33,7 +33,7 @@ public class PetClubController {
   public String login(@RequestParam String name) {
     if (petService.isInDatabase(name)) {
       if (petService.getCurrentPet() != null) {
-        petService.setCurrentPet(petService.matchingPet(name));
+        petService.matchingPet(name);
         // * if user is already logged in and is logging in with another pet, we overwrite the current pet for the new one
       }
       return "redirect:information?name=" + name;
@@ -49,7 +49,6 @@ public class PetClubController {
 
     if (petService.getCurrentPet() == null) {
       model.addAttribute("pet", petService.matchingPet(name));
-      petService.setCurrentPet(petService.matchingPet(name));
       // * after first login the pet is set as a current pet which is the called through pet service
       // * in other methods and that way can easily be always rendered
     } else {
@@ -89,7 +88,7 @@ public class PetClubController {
   @GetMapping("/history")
   public String showHistory(Model model) {
     model.addAttribute("pet", petService.getCurrentPet());
-    petService.resetBooleans(); // * reseting booleans for alerts
+    petService.resetBooleans(); // * resetting booleans for alerts
     return "history";
   }
 
