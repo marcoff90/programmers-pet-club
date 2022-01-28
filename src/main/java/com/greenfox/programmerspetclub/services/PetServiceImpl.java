@@ -34,6 +34,7 @@ public class PetServiceImpl implements PetService {
     return currentPet;
   }
 
+  @Override
   public List<Pet> getPets() {
     return pets;
   }
