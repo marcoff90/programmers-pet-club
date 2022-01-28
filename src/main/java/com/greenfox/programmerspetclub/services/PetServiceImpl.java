@@ -6,8 +6,11 @@ import com.greenfox.programmerspetclub.models.pet.Paegas;
 import com.greenfox.programmerspetclub.models.pet.Pet;
 import com.greenfox.programmerspetclub.models.pet.Unicorn;
 import com.greenfox.programmerspetclub.models.pet.Wolf;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,27 +39,43 @@ public class PetServiceImpl implements PetService {
   }
 
   @Override
-  public boolean addPet(String type, String food, String drink, String name) {
+  public void addPet(String type, String food, String drink, String name) {
     Pet pet = null;
     switch (type) {
       case "Cute Fox" :
-        pet = new Fox(name, food, drink);
+        pet = new Fox(name.substring(0, 1).toUpperCase() + name.substring(1), food, drink);
         break;
-      case "Cute Wolf" : pet = new Wolf(name, food, drink);
+      case "Cute Wolf" : pet = new Wolf(name.substring(0, 1).toUpperCase() + name.substring(1), food, drink);
         break;
       case "Cute Doggo" :
-        pet = new Doggo(name, food, drink);
+        pet = new Doggo(name.substring(0, 1).toUpperCase() + name.substring(1), food, drink);
         break;
       case "Cute Unicorn" :
-        pet = new Unicorn(name, food, drink);
+        pet = new Unicorn(name.substring(0, 1).toUpperCase() + name.substring(1), food, drink);
         break;
       case "Paegas Unicorn" :
-        pet = new Paegas(name, food, drink);
+        pet = new Paegas(name.substring(0, 1).toUpperCase() + name.substring(1), food, drink);
         break;
     }
     pets.add(pet);
     this.currentPet = pet;
-    return true;
+  }
+
+  @Override
+  public void updateFoodAndDrink(String drink, String food) {
+    currentPet.setDrink(drink);
+    currentPet.setFood(food);
+    currentPet.setFoodUpdated(true);
+    currentPet.addHistory(getTimeAndDate() + " " + currentPet.getName() +
+        " changed his food & drink into " + food + " & " + drink);
+  }
+
+  @Override
+  public void updateTricks(String newTrick) {
+    currentPet.addTrick(newTrick);
+    currentPet.setTricksUpdated(true);
+    currentPet.addHistory(getTimeAndDate() + " " + currentPet.getName() +
+        " has learned to " + newTrick);
   }
 
   @Override
@@ -64,7 +83,26 @@ public class PetServiceImpl implements PetService {
     if (name == null) {
       return false;
     }
-
     return pets.stream().anyMatch(pet -> pet.getName().equalsIgnoreCase(name));
+  }
+
+  @Override
+  public void resetBooleans() {
+    currentPet.setCreated(false);
+    currentPet.setHasntBeenFound(false);
+    currentPet.setTricksUpdated(false);
+    currentPet.setFoodUpdated(false);
+  }
+
+  @Override
+  public Pet matchingPet(String name) {
+    Optional<Pet> matchingPet = pets.stream().filter(pet -> pet.getName().equalsIgnoreCase(name)).findFirst();
+    return matchingPet.orElse(null);
+  }
+
+  private String getTimeAndDate() {
+    String date = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+    return date.substring(6, 8) + "." + date.substring(5, 7) + "." + date.substring(0, 4) + " at " + date.substring(9, 11) + ":" + date.substring(
+        11, 13);
   }
 }
