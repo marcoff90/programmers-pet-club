@@ -62,7 +62,7 @@ public class PetClubController {
     if (name == null) {
       model.addAttribute("isAlertVisible", false);
       model.addAttribute("name", "What will be the name of your amazing pet?");
-      // * when the name isn't passed, the alert isn't visible
+      // * when the name isn't passed, the alert isn't visible, the placeholder in the form shows generic message
       shouldUserSeeTheMenu(model);
       // * if the user isn't logged in he doesn't see whole menu
     } else if (!petService.isInDatabase(name)) {
@@ -76,6 +76,7 @@ public class PetClubController {
     if (name != null) {
       String nameWithUpperCase = name.substring(0, 1).toUpperCase() + name.substring(1);
       model.addAttribute("name", nameWithUpperCase);
+      // * when the user has entered a name not known in the database, the name is then showed as a placeholder in the form
     }
     return "create";
   }
@@ -86,7 +87,6 @@ public class PetClubController {
     petService.addPet(type, food, drink, name); // * creates a new pet, adds to the list, changes the current pet to the newly created
     petService.getCurrentPet().setCreated(true); // * for alert showing
     return "redirect:information";
-
   }
 
   @GetMapping("/history")

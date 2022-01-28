@@ -12,9 +12,7 @@ public class Doggo extends Pet {
   }
 
   private String chooseImg() {
-    String[] pics = {"IMG_0657.JPG", "IMG_0658.JPG",
-        "IMG_0659.JPG", "IMG_0660.JPG",
-        "IMG_0661.JPG"};
+    String[] pics = {"IMG_0657.JPG", "IMG_0658.JPG", "IMG_0659.JPG", "IMG_0660.JPG", "IMG_0661.JPG"};
     Random rand = new Random();
     return pics[rand.nextInt(pics.length)];
   }

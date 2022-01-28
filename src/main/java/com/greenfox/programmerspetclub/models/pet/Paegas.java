@@ -12,8 +12,7 @@ public class Paegas extends Pet {
   }
 
   private String chooseImg() {
-    String[] pics = {"IMG_0662.JPG", "IMG_0663.JPG",
-        "IMG_0664.JPG", "IMG_0665.JPG"};
+    String[] pics = {"IMG_0662.JPG", "IMG_0663.JPG", "IMG_0664.JPG", "IMG_0665.JPG"};
     Random rand = new Random();
     return pics[rand.nextInt(pics.length)];
   }
