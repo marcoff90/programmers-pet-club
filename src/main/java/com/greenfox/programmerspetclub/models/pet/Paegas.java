@@ -7,7 +7,7 @@ public class Paegas extends Pet {
   public Paegas(String name, String food, String drink) {
     super(name, food, drink);
     this.description = "If you wanna fly away from all your problems, " + name + " is here for you! "
-        + "Jusst jump up and let him take you to the wonderland!";
+        + "Just jump up and let him take you to the wonderland!";
     this.image = chooseImg();
   }
 

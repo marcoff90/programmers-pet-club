@@ -70,7 +70,7 @@ public class PetServiceImpl implements PetService {
     currentPet.setFood(food);
     currentPet.setFoodUpdated(true);
     currentPet.addHistory(getTimeAndDate() + " " + currentPet.getName() +
-        " changed his food & drink into " + food + " & " + drink);
+        " changed his food & drink into " + food + " & drinks " + drink);
   }
 
   @Override

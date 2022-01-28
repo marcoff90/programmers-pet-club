@@ -52,11 +52,8 @@
           <div class="form-group my-2">
             <label for="trick" class="mb-2">Teach trick</label>
             <select class="form-control text-dark" id="trick" name="newTrick">
-              <option>Trick 1</option>
-              <option>Trick 2</option>
-              <option>Trick 3</option>
-              <option>Trick 4</option>
-              <option>Trick 5</option>
+              <option th:each="trick : ${T(com.greenfox.programmerspetclub.enums.Trick).values()}"
+                      th:value="${trick.label}" th:text="${trick.label}"></option>
             </select>
             <a href="information.html"><button type="submit"
                                                class="btn btn-outline-light mt-3">Teach</button></a>
