@@ -3,6 +3,7 @@ package com.greenfox.programmerspetclub.models.pet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import lombok.Data;
 
 @Data
@@ -18,6 +19,7 @@ public abstract class Pet {
   private boolean isFoodUpdated;
   private boolean isTricksUpdated;
   private boolean isCreated;
+  protected Random rand;
 
   public Pet(String name, String food, String drink) {
     this.name = name;
@@ -28,6 +30,7 @@ public abstract class Pet {
     this.isTricksUpdated = false;
     this.isFoodUpdated = false;
     this.isCreated = false;
+    this.rand = new Random();
   }
 
   public List<String> getHistory() {

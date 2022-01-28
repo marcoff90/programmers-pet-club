@@ -17,11 +17,10 @@ public interface PetService {
 
   public void updateTricks(String newTrick);
 
-  public boolean isInDatabase(String name); // returns boolean if the pet was found for redirecting and showing menu
+  public boolean isInDatabase(String name);
 
   public void resetBooleans();
 
   public Pet matchingPet(String name);
-
 
 }

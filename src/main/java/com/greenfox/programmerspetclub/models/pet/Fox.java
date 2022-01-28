@@ -1,7 +1,5 @@
 package com.greenfox.programmerspetclub.models.pet;
 
-import java.util.Random;
-
 public class Fox extends Pet {
 
   public Fox(String name, String food, String drink) {
@@ -13,7 +11,6 @@ public class Fox extends Pet {
 
   private String chooseImg() {
     String[] pics = {"IMG_0672.JPG", "IMG_0673.JPG", "IMG_0674.JPG", "IMG_0675.JPG"};
-    Random rand = new Random();
     return pics[rand.nextInt(pics.length)];
   }
 }
