@@ -47,7 +47,7 @@ public abstract class Pet {
   public void addTrick(String newTrick) {
     tricks.add(newTrick);
   }
-//
+
   public void addHistory(String history) {
     this.history.add(history);
   }

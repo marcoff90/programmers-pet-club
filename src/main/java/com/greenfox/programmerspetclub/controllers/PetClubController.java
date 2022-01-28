@@ -58,10 +58,10 @@ public class PetClubController {
 
   @GetMapping("/create")
   public String showCreate(Model model, @RequestParam(required = false) String name) {
-    // TODO if the user has tried to log in with the wrong name, set the wrong name as a placeholder
-    // TODO create a boolean for that
+
     if (name == null) {
       model.addAttribute("isAlertVisible", false);
+      model.addAttribute("name", "What will be the name of your amazing pet?");
       // * when the name isn't passed, the alert isn't visible
       shouldUserSeeTheMenu(model);
       // * if the user isn't logged in he doesn't see whole menu
@@ -71,6 +71,11 @@ public class PetClubController {
       model.addAttribute("isInDatabase", petService.isInDatabase(null));
       // * when the user is already logged in and trying to log in with another pet, but enters a wrong name, the alert shows
       // * up and the menu is no longer visible
+    }
+
+    if (name != null) {
+      String nameWithUpperCase = name.substring(0, 1).toUpperCase() + name.substring(1);
+      model.addAttribute("name", nameWithUpperCase);
     }
     return "create";
   }
