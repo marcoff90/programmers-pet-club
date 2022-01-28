@@ -53,7 +53,9 @@ public class PetClubController {
     } else {
       model.addAttribute("pet", petService.getCurrentPet());
     }
-    return "information";
+    return petService.getCurrentPet() == null & name == null ? "redirect:home" : "information";
+    // * if for some reason would not logged-in user enter the url for information, it takes him to the home page
+    // * similar logic used in other "hidden" views for not logged-in users
   }
 
   @GetMapping("/create")
@@ -93,14 +95,14 @@ public class PetClubController {
   public String showHistory(Model model) {
     model.addAttribute("pet", petService.getCurrentPet());
     petService.resetBooleans(); // * resetting booleans for alerts
-    return "history";
+    return petService.getCurrentPet() == null ? "redirect:home" : "history";
   }
 
   @GetMapping("/nutritioncenter")
   public String showNutrition(Model model) {
     model.addAttribute("pet", petService.getCurrentPet());
     petService.resetBooleans();
-    return "nutritionstore";
+    return petService.getCurrentPet() == null ? "redirect:home" : "nutritionstore";
   }
 
   @PostMapping("/nutritioncenter")
@@ -113,7 +115,7 @@ public class PetClubController {
   public String showTricks(Model model) {
     model.addAttribute("pet", petService.getCurrentPet());
     petService.resetBooleans();
-    return "tricks";
+    return petService.getCurrentPet() == null ? "redirect:home" : "tricks";
   }
 
   @PostMapping("/tricks")

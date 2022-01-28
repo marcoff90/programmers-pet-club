@@ -52,7 +52,7 @@
     </div>
     <div class="alert alert-light" role="alert" th:if="${pet.isFoodUpdated()}">
       <strong th:text="${pet.getName()}">Pet name</strong> eats <strong
-        th:text="${pet.getFood()}"></strong> and <strong th:text="${pet.getDrink()}"></strong> now!
+        th:text="${pet.getFood()}"></strong> and drinks <strong th:text="${pet.getDrink()}"></strong> now!
     </div>
     <div class="alert alert-light" role="alert" th:if="${pet.isCreated()}">
       <strong th:text="${pet.getName()}">New Pet name</strong> is now ready for you!
