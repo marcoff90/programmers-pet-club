@@ -45,7 +45,6 @@ public class PetClubController {
 
   @GetMapping("/information")
   public String showInformation(Model model, @RequestParam(required = false) String name) {
-
     if (petService.getCurrentPet() == null) {
       model.addAttribute("pet", petService.matchingPet(name));
       // * after first login the pet is set as a current pet which is the called through pet service
@@ -53,7 +52,7 @@ public class PetClubController {
     } else {
       model.addAttribute("pet", petService.getCurrentPet());
     }
-    return petService.getCurrentPet() == null & name == null ? "redirect:home" : "information";
+    return "information";
     // * if for some reason would not logged-in user enter the url for information, it takes him to the home page
     // * similar logic used in other "hidden" views for not logged-in users
   }
@@ -95,14 +94,14 @@ public class PetClubController {
   public String showHistory(Model model) {
     model.addAttribute("pet", petService.getCurrentPet());
     petService.resetBooleans(); // * resetting booleans for alerts
-    return petService.getCurrentPet() == null ? "redirect:home" : "history";
+    return "history";
   }
 
   @GetMapping("/nutritioncenter")
   public String showNutrition(Model model) {
     model.addAttribute("pet", petService.getCurrentPet());
     petService.resetBooleans();
-    return petService.getCurrentPet() == null ? "redirect:home" : "nutritionstore";
+    return "nutritionstore";
   }
 
   @PostMapping("/nutritioncenter")
@@ -115,7 +114,7 @@ public class PetClubController {
   public String showTricks(Model model) {
     model.addAttribute("pet", petService.getCurrentPet());
     petService.resetBooleans();
-    return petService.getCurrentPet() == null ? "redirect:home" : "tricks";
+    return "tricks";
   }
 
   @PostMapping("/tricks")
