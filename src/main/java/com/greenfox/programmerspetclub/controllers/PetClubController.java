@@ -24,11 +24,8 @@ public class PetClubController {
   @GetMapping("/home")
   public String index(Model model) {
     shouldUserSeeTheMenu(model);
+    // * if user is logged in, he sees the whole menu, when not he sees only home and create
     return "home";
-
-    // * once the user is successfully  logged in, the petservice has the current pet saved in memory
-    // * and then when user goes back to homepage, he see's all the options from the menu, if he's not logged
-    // * in he can only see option to Create a new pet and go back to the home page by clicking programmers pet club
   }
 
   @PostMapping("/home")
@@ -39,8 +36,9 @@ public class PetClubController {
         // * if user is already logged in and is logging in with another pet, we overwrite the current pet for the new one
       }
       userService.getUser().setLoggedIn(true);
+      // * user is set to logged in and when requesting other endpoints, he gets the correct view
       return "redirect:information?name=" + name;
-      // * if the name is found in the database, the user is redirected to information page of his pet
+      // * if the name is found in the database, the user is redirected to information page of his pet, where this pet is set as a current pet
     } else {
       return "redirect:create?name=" + name;
       // * if not user is redirected to create a pet page
@@ -68,7 +66,7 @@ public class PetClubController {
       model.addAttribute("isWrongName", true);
       model.addAttribute("name", "What will be the name of your amazing pet?");
       model.addAttribute("wrongName", firstLetterToUpperCase(wrongName));
-      // * wrongName redirected after submitting create form with name already in database, displays alert
+      // * wrongName redirected after submitting create form with name which is already in database, displays alert
     }
 
     if (name == null) {
@@ -83,8 +81,10 @@ public class PetClubController {
       model.addAttribute("isInDatabase", petService.isInDatabase(null));
       // * when the user is already logged in and trying to log in with another pet, but enters a wrong name, the alert shows
       // * up and the menu is no longer visible
+      userService.getUser().setLoggedIn(false);
+      // * when redirected from home based on name not being in database, user is no longer logged in and requests for other endpoints are redirected
+      // * to home page
     }
-
 
     if (name != null) {
       model.addAttribute("name", firstLetterToUpperCase(name));
@@ -94,7 +94,7 @@ public class PetClubController {
   }
 
   @PostMapping("/create")
-  public String store(Model model, @RequestParam String name, @RequestParam String type,
+  public String store(@RequestParam String name, @RequestParam String type,
       @RequestParam String food, @RequestParam String drink) {
     if (!petService.isInDatabase(name)) {
       petService.addPet(type, food, drink,
@@ -103,40 +103,32 @@ public class PetClubController {
       return "redirect:information";
     } else {
       return "redirect:create?wrongName=" + name;
+      // * if the pet is already in database, redirects back to create and displays alert
     }
   }
 
   @GetMapping("/history")
   public String showHistory(Model model) {
-
     if (userService.getUser().isLoggedIn()) {
-      model.addAttribute("pet", petService.getCurrentPet());
-      petService.resetBooleans();
+      addPetToModel(model);
       return "history";
     } else {
       return "redirect:home";
     }
-//    model.addAttribute("pet", petService.getCurrentPet());
-//    petService.resetBooleans(); // * resetting booleans for alerts
-//    return userService.getUser().isLoggedIn() ? "history" : "home";
   }
 
   @GetMapping("/nutritioncenter")
   public String showNutrition(Model model) {
     if (userService.getUser().isLoggedIn()) {
-      model.addAttribute("pet", petService.getCurrentPet());
-      petService.resetBooleans();
+      addPetToModel(model);
       return "nutritionstore";
     } else {
       return "redirect:home";
     }
-//    model.addAttribute("pet", petService.getCurrentPet());
-//    petService.resetBooleans();
-//    return userService.getUser().isLoggedIn() ? "nutritionstore" : "home";
   }
 
   @PostMapping("/nutritioncenter")
-  public String updateNutrition(Model model, @RequestParam String food,
+  public String updateNutrition(@RequestParam String food,
       @RequestParam String drink) {
     petService.updateFoodAndDrink(drink, food);
     return "redirect:information";
@@ -145,8 +137,7 @@ public class PetClubController {
   @GetMapping("/tricks")
   public String showTricks(Model model) {
     if (userService.getUser().isLoggedIn()) {
-      model.addAttribute("pet", petService.getCurrentPet());
-      petService.resetBooleans();
+      addPetToModel(model);
       return "tricks";
     } else {
       return "redirect:home";
@@ -154,22 +145,24 @@ public class PetClubController {
   }
 
   @PostMapping("/tricks")
-  public String updateTrick(Model model, @RequestParam String newTrick) {
+  public String updateTrick(@RequestParam String newTrick) {
     petService.updateTricks(newTrick);
     return "redirect:information";
   }
 
   private Model shouldUserSeeTheMenu(Model model) {
-    if (petService.getCurrentPet() != null) {
-      model.addAttribute("isInDatabase",
-          petService.isInDatabase(petService.getCurrentPet().getName()));
-    } else {
-      model.addAttribute("isInDatabase", petService.isInDatabase(null));
-    }
+    model.addAttribute("isInDatabase", userService.getUser().isLoggedIn());
+    // * if the user is logged in, the tricks, history, information and nutritionstore in menu bar are visible
     return model;
   }
 
   private String firstLetterToUpperCase(String name) {
     return name.substring(0, 1).toUpperCase() + name.substring(1);
+  }
+
+  private Model addPetToModel(Model model) {
+    model.addAttribute("pet", petService.getCurrentPet());
+    petService.resetBooleans();
+    return model;
   }
 }
