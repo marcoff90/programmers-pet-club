@@ -98,6 +98,7 @@ public class PetClubController {
       model.addAttribute("name", firstLetterToUpperCase(name));
       // * when the user has entered a name not known in the database, the name is then showed as a placeholder in the form
     }
+    userService.getUser().setRedirected(false);
     return "create";
   }
 
