@@ -63,6 +63,7 @@ public class PetClubController {
     if (wrongName != null) {
       model.addAttribute("isWrongName", true);
       model.addAttribute("name", "What will be the name of your amazing pet?");
+      model.addAttribute("wrongName", firstLetterToUpperCase(wrongName));
       // * wrongName redirected after submitting create form with name already in database, displays alert
     }
 
@@ -82,8 +83,7 @@ public class PetClubController {
 
 
     if (name != null) {
-      String nameWithUpperCase = name.substring(0, 1).toUpperCase() + name.substring(1);
-      model.addAttribute("name", nameWithUpperCase);
+      model.addAttribute("name", firstLetterToUpperCase(name));
       // * when the user has entered a name not known in the database, the name is then showed as a placeholder in the form
     }
     return "create";
@@ -144,5 +144,9 @@ public class PetClubController {
       model.addAttribute("isInDatabase", petService.isInDatabase(null));
     }
     return model;
+  }
+
+  private String firstLetterToUpperCase(String name) {
+    return name.substring(0, 1).toUpperCase() + name.substring(1);
   }
 }
