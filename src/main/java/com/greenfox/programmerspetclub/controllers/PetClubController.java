@@ -58,7 +58,13 @@ public class PetClubController {
   }
 
   @GetMapping("/create")
-  public String showCreate(Model model, @RequestParam(required = false) String name) {
+  public String showCreate(Model model, @RequestParam(required = false) String name, @RequestParam(required = false) String wrongName) {
+
+    if (wrongName != null) {
+      model.addAttribute("isWrongName", true);
+      model.addAttribute("name", "What will be the name of your amazing pet?");
+      // * wrongName redirected after submitting create form with name already in database, displays alert
+    }
 
     if (name == null) {
       model.addAttribute("isAlertVisible", false);
@@ -74,6 +80,7 @@ public class PetClubController {
       // * up and the menu is no longer visible
     }
 
+
     if (name != null) {
       String nameWithUpperCase = name.substring(0, 1).toUpperCase() + name.substring(1);
       model.addAttribute("name", nameWithUpperCase);
@@ -85,9 +92,14 @@ public class PetClubController {
   @PostMapping("/create")
   public String store(Model model, @RequestParam String name, @RequestParam String type,
       @RequestParam String food, @RequestParam String drink) {
-    petService.addPet(type, food, drink, name); // * creates a new pet, adds to the list, changes the current pet to the newly created
-    petService.getCurrentPet().setCreated(true); // * for alert showing
-    return "redirect:information";
+    if (!petService.isInDatabase(name)) {
+      petService.addPet(type, food, drink,
+          name); // * creates a new pet, adds to the list, changes the current pet to the newly created
+      petService.getCurrentPet().setCreated(true); // * for alert showing
+      return "redirect:information";
+    } else {
+      return "redirect:create?wrongName=" + name;
+    }
   }
 
   @GetMapping("/history")
@@ -105,7 +117,8 @@ public class PetClubController {
   }
 
   @PostMapping("/nutritioncenter")
-  public String updateNutrition(Model model, @RequestParam String food, @RequestParam String drink) {
+  public String updateNutrition(Model model, @RequestParam String food,
+      @RequestParam String drink) {
     petService.updateFoodAndDrink(drink, food);
     return "redirect:information";
   }
@@ -125,7 +138,8 @@ public class PetClubController {
 
   private Model shouldUserSeeTheMenu(Model model) {
     if (petService.getCurrentPet() != null) {
-      model.addAttribute("isInDatabase", petService.isInDatabase(petService.getCurrentPet().getName()));
+      model.addAttribute("isInDatabase",
+          petService.isInDatabase(petService.getCurrentPet().getName()));
     } else {
       model.addAttribute("isInDatabase", petService.isInDatabase(null));
     }
