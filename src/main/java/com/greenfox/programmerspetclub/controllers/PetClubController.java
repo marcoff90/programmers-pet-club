@@ -1,6 +1,7 @@
 package com.greenfox.programmerspetclub.controllers;
 
-import com.greenfox.programmerspetclub.services.PetService;
+import com.greenfox.programmerspetclub.services.petservice.PetService;
+import com.greenfox.programmerspetclub.services.userservice.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PetClubController {
 
   private PetService petService;
+  private UserService userService;
 
   @Autowired
-  public PetClubController(PetService petService) {
+  public PetClubController(PetService petService, UserService userService) {
     this.petService = petService;
+    this.userService = userService;
   }
 
   @GetMapping("/home")
@@ -35,6 +38,7 @@ public class PetClubController {
         petService.matchingPet(name);
         // * if user is already logged in and is logging in with another pet, we overwrite the current pet for the new one
       }
+      userService.getUser().setLoggedIn(true);
       return "redirect:information?name=" + name;
       // * if the name is found in the database, the user is redirected to information page of his pet
     } else {
@@ -52,7 +56,7 @@ public class PetClubController {
     } else {
       model.addAttribute("pet", petService.getCurrentPet());
     }
-    return "information";
+    return userService.getUser().isLoggedIn() ? "information" : "home";
     // * if for some reason would not logged-in user enter the url for information, it takes him to the home page
     // * similar logic used in other "hidden" views for not logged-in users
   }
@@ -104,16 +108,31 @@ public class PetClubController {
 
   @GetMapping("/history")
   public String showHistory(Model model) {
-    model.addAttribute("pet", petService.getCurrentPet());
-    petService.resetBooleans(); // * resetting booleans for alerts
-    return "history";
+
+    if (userService.getUser().isLoggedIn()) {
+      model.addAttribute("pet", petService.getCurrentPet());
+      petService.resetBooleans();
+      return "history";
+    } else {
+      return "redirect:home";
+    }
+//    model.addAttribute("pet", petService.getCurrentPet());
+//    petService.resetBooleans(); // * resetting booleans for alerts
+//    return userService.getUser().isLoggedIn() ? "history" : "home";
   }
 
   @GetMapping("/nutritioncenter")
   public String showNutrition(Model model) {
-    model.addAttribute("pet", petService.getCurrentPet());
-    petService.resetBooleans();
-    return "nutritionstore";
+    if (userService.getUser().isLoggedIn()) {
+      model.addAttribute("pet", petService.getCurrentPet());
+      petService.resetBooleans();
+      return "nutritionstore";
+    } else {
+      return "redirect:home";
+    }
+//    model.addAttribute("pet", petService.getCurrentPet());
+//    petService.resetBooleans();
+//    return userService.getUser().isLoggedIn() ? "nutritionstore" : "home";
   }
 
   @PostMapping("/nutritioncenter")
@@ -125,9 +144,13 @@ public class PetClubController {
 
   @GetMapping("/tricks")
   public String showTricks(Model model) {
-    model.addAttribute("pet", petService.getCurrentPet());
-    petService.resetBooleans();
-    return "tricks";
+    if (userService.getUser().isLoggedIn()) {
+      model.addAttribute("pet", petService.getCurrentPet());
+      petService.resetBooleans();
+      return "tricks";
+    } else {
+      return "redirect:home";
+    }
   }
 
   @PostMapping("/tricks")

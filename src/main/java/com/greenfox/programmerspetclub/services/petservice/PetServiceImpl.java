@@ -1,4 +1,4 @@
-package com.greenfox.programmerspetclub.services;
+package com.greenfox.programmerspetclub.services.petservice;
 
 import com.greenfox.programmerspetclub.models.pet.Doggo;
 import com.greenfox.programmerspetclub.models.pet.Fox;

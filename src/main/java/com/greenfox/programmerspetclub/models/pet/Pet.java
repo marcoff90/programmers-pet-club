@@ -16,9 +16,9 @@ public abstract class Pet {
   protected List<String> tricks;
   protected List<String> history;
   protected String image;
-  private boolean isFoodUpdated;
-  private boolean isTricksUpdated;
-  private boolean isCreated;
+  protected boolean isFoodUpdated;
+  protected boolean isTricksUpdated;
+  protected boolean isCreated;
   protected Random rand;
 
   public Pet(String name, String food, String drink) {
