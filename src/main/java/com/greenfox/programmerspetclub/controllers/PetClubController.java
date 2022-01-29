@@ -100,6 +100,7 @@ public class PetClubController {
       petService.addPet(type, food, drink,
           name); // * creates a new pet, adds to the list, changes the current pet to the newly created
       petService.getCurrentPet().setCreated(true); // * for alert showing
+      userService.getUser().setLoggedIn(true);
       return "redirect:information";
     } else {
       return "redirect:create?wrongName=" + name;
