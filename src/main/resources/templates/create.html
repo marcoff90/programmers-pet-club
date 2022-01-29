@@ -76,7 +76,7 @@
           <label for="name" class="text-success mb-2"><strong>Enter a name of your new
             pet!</strong></label>
           <input type="text" class="form-control" id="name" name="name"
-                 th:placeholder="${name}" required pattern="[A-Za-z\s]*">
+                 th:placeholder="${name}" required pattern="^[A-Za-z][A-Za-z\s]*[A-Za-z]$">
           <label for="type" class="text-success my-2"><strong>Choose the type of your new
             pet!</strong></label>
           <select class="form-control text-secondary" id="type" name="type">
