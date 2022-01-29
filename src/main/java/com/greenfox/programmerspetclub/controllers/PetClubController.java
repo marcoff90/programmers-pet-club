@@ -21,7 +21,7 @@ public class PetClubController {
     this.userService = userService;
   }
 
-  @GetMapping("/home")
+  @GetMapping({"/home",""})
   public String index(Model model) {
     shouldUserSeeTheMenu(model);
     // * if user is logged in, he sees the whole menu, when not he sees only home and create
