@@ -6,8 +6,10 @@ import lombok.Data;
 public class User {
 
   private boolean isLoggedIn;
+  private boolean isRedirected;
 
   public User() {
     this.isLoggedIn = false;
+    this.isRedirected = false;
   }
 }

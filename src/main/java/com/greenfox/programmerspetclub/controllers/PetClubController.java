@@ -24,6 +24,7 @@ public class PetClubController {
   @GetMapping("/home")
   public String index(Model model) {
     shouldUserSeeTheMenu(model);
+    model.addAttribute("wasUserRedirected", userService.getUser().isRedirected());
     // * if user is logged in, he sees the whole menu, when not he sees only home and create
     return "home";
   }
@@ -47,14 +48,21 @@ public class PetClubController {
 
   @GetMapping("/information")
   public String showInformation(Model model, @RequestParam(required = false) String name) {
-    if (petService.getCurrentPet() == null) {
-      model.addAttribute("pet", petService.matchingPet(name));
-      // * after first login the pet is set as a current pet which is the called through pet service
-      // * in other methods and that way can easily be always rendered
+    if (userService.getUser().isLoggedIn()) {
+      if (petService.getCurrentPet() == null) {
+        model.addAttribute("pet", petService.matchingPet(name));
+        // * after first login the pet is set as a current pet which is the called through pet service
+        // * in other methods and that way can easily be always rendered
+      } else {
+        model.addAttribute("pet", petService.getCurrentPet());
+      }
+      return "information";
     } else {
-      model.addAttribute("pet", petService.getCurrentPet());
+      userService.getUser().setRedirected(true);
+      return "redirect:home";
     }
-    return userService.getUser().isLoggedIn() ? "information" : "home";
+
+//    return userService.getUser().isLoggedIn() ? "information" : "home";
     // * if for some reason would not logged-in user enter the url for information, it takes him to the home page
     // * similar logic used in other "hidden" views for not logged-in users
   }
@@ -114,6 +122,7 @@ public class PetClubController {
       addPetToModel(model);
       return "history";
     } else {
+      userService.getUser().setRedirected(true);
       return "redirect:home";
     }
   }
@@ -124,6 +133,7 @@ public class PetClubController {
       addPetToModel(model);
       return "nutritionstore";
     } else {
+      userService.getUser().setRedirected(true);
       return "redirect:home";
     }
   }
@@ -141,6 +151,7 @@ public class PetClubController {
       addPetToModel(model);
       return "tricks";
     } else {
+      userService.getUser().setRedirected(true);
       return "redirect:home";
     }
   }
@@ -164,6 +175,7 @@ public class PetClubController {
   private Model addPetToModel(Model model) {
     model.addAttribute("pet", petService.getCurrentPet());
     petService.resetBooleans();
+    userService.getUser().setRedirected(false);
     return model;
   }
 }
