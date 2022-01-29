@@ -100,7 +100,8 @@ public class PetServiceImpl implements PetService {
 
   @Override
   public Pet matchingPet(String name) {
-    Optional<Pet> matchingPet = pets.stream().filter(pet -> pet.getName().equalsIgnoreCase(name)).findFirst();
+    Optional<Pet> matchingPet = pets.stream().filter(pet -> pet.getName().equalsIgnoreCase(name))
+        .findFirst();
     currentPet = matchingPet.orElse(null);
     return matchingPet.orElse(null);
     // * when the user is logging in with pet, it checks if the pet is in the list and then sets it as a current pet
@@ -108,7 +109,8 @@ public class PetServiceImpl implements PetService {
 
   private String getTimeAndDate() {
     String date = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-    return date.substring(6, 8) + "." + date.substring(4, 6) + "." + date.substring(0, 4) + " at " + date.substring(9, 11) + ":" + date.substring(
+    return date.substring(6, 8) + "." + date.substring(4, 6) + "." + date.substring(0, 4) + " at "
+        + date.substring(9, 11) + ":" + date.substring(
         11, 13);
   }
 }

@@ -24,8 +24,9 @@ public class PetClubController {
   @GetMapping("/home")
   public String index(Model model) {
     shouldUserSeeTheMenu(model);
-    model.addAttribute("wasUserRedirected", userService.getUser().isRedirected());
     // * if user is logged in, he sees the whole menu, when not he sees only home and create
+    model.addAttribute("wasUserRedirected", userService.getUser().isRedirected());
+    // * if the user has been redirected, he does get the alert
     return "home";
   }
 
@@ -61,14 +62,13 @@ public class PetClubController {
       userService.getUser().setRedirected(true);
       return "redirect:home";
     }
-
-//    return userService.getUser().isLoggedIn() ? "information" : "home";
     // * if for some reason would not logged-in user enter the url for information, it takes him to the home page
     // * similar logic used in other "hidden" views for not logged-in users
   }
 
   @GetMapping("/create")
-  public String showCreate(Model model, @RequestParam(required = false) String name, @RequestParam(required = false) String wrongName) {
+  public String showCreate(Model model, @RequestParam(required = false) String name,
+      @RequestParam(required = false) String wrongName) {
 
     if (wrongName != null) {
       model.addAttribute("isWrongName", true);
