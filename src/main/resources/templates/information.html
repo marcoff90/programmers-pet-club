@@ -48,7 +48,7 @@
   <div class="row text-center justify-content-center mx-auto">
     <div class="alert alert-light" role="alert" th:if="${pet.isTricksUpdated()}">
       <strong th:text="${pet.getName()}">Pet name</strong> now knows how to <strong
-        th:text="${pet.getTricks().get(pet.getTricks().size() - 1)}"></strong>!
+        th:text="${tricks.get(tricks.size() - 1)}"></strong>!
     </div>
     <div class="alert alert-light" role="alert" th:if="${pet.isFoodUpdated()}">
       <strong th:text="${pet.getName()}">Pet name</strong> eats <strong
@@ -75,7 +75,7 @@
         <li class="list-group-item text-light bg-dark border-light" th:text="${pet.getDrink()}">
           Current food
         </li>
-        <div th:each="trick : ${pet.getTricks()}">
+        <div th:each="trick : ${tricks}">
           <li class="list-group-item text-light bg-dark" th:text="${trick}">Known tricks</li>
         </div>
       </ul>
