@@ -1,6 +1,8 @@
 package com.greenfox.programmerspetclub.controllers;
 
+import com.greenfox.programmerspetclub.services.historyservice.HistoryService;
 import com.greenfox.programmerspetclub.services.petservice.PetService;
+import com.greenfox.programmerspetclub.services.trickservice.TrickService;
 import com.greenfox.programmerspetclub.services.userservice.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,17 +10,26 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 public class PetClubController {
 
+  // TODO
+  // * when tricks are learned check, if it's already in the database under the pets name, if yes, don't add, show alert
+  // * don't add to history too
+
   private PetService petService;
   private UserService userService;
+  private TrickService trickService;
+  private HistoryService historyService;
 
   @Autowired
-  public PetClubController(PetService petService, UserService userService) {
+  public PetClubController(PetService petService, UserService userService, TrickService trickService, HistoryService historyService) {
     this.petService = petService;
     this.userService = userService;
+    this.trickService = trickService;
+    this.historyService = historyService;
   }
 
   @GetMapping("/home")
@@ -52,10 +63,13 @@ public class PetClubController {
     if (userService.getUser().isLoggedIn()) {
       if (petService.getCurrentPet() == null) {
         model.addAttribute("pet", petService.matchingPet(name));
+        model.addAttribute("tricks", trickService.getTricks(petService.getCurrentPet().getName()));
+
         // * after first login the pet is set as a current pet which is the called through pet service
         // * in other methods and that way can easily be always rendered
       } else {
         model.addAttribute("pet", petService.getCurrentPet());
+        model.addAttribute("tricks", trickService.getTricks(petService.getCurrentPet().getName()));
       }
       return "information";
     } else {
@@ -67,13 +81,13 @@ public class PetClubController {
   }
 
   @GetMapping("/create")
-  public String showCreate(Model model, @RequestParam(required = false) String name,
-      @RequestParam(required = false) String wrongName) {
+  public String showCreate(Model model, @RequestParam(required = false) String name, @RequestParam(required = false) String wrongName) {
 
     if (wrongName != null) {
       model.addAttribute("isWrongName", true);
       model.addAttribute("name", "What will be the name of your amazing pet?");
       model.addAttribute("wrongName", firstLetterToUpperCase(wrongName));
+      userService.getUser().setLoggedIn(false);
       // * wrongName redirected after submitting create form with name which is already in database, displays alert
     }
 
@@ -103,11 +117,9 @@ public class PetClubController {
   }
 
   @PostMapping("/create")
-  public String store(@RequestParam String name, @RequestParam String type,
-      @RequestParam String food, @RequestParam String drink) {
+  public String store(@RequestParam String name, @RequestParam String type, @RequestParam String food, @RequestParam String drink) {
     if (!petService.isInDatabase(name)) {
-      petService.addPet(type, food, drink,
-          name); // * creates a new pet, adds to the list, changes the current pet to the newly created
+      petService.addPet(type, food, drink, name); // * creates a new pet, adds to the list, changes the current pet to the newly created
       petService.getCurrentPet().setCreated(true); // * for alert showing
       userService.getUser().setLoggedIn(true);
       return "redirect:information";
@@ -121,6 +133,7 @@ public class PetClubController {
   public String showHistory(Model model) {
     if (userService.getUser().isLoggedIn()) {
       addPetToModel(model);
+      model.addAttribute("history", historyService.getHistory(petService.getCurrentPet().getName()));
       return "history";
     } else {
       userService.getUser().setRedirected(true);
@@ -140,9 +153,10 @@ public class PetClubController {
   }
 
   @PostMapping("/nutritioncenter")
-  public String updateNutrition(@RequestParam String food,
-      @RequestParam String drink) {
+  public String updateNutrition(@RequestParam String food, @RequestParam String drink) {
     petService.updateFoodAndDrink(drink, food);
+    historyService.addHistoryOfFood(petService.getCurrentPet().getName(), food, drink);
+    // * updates pet in database, adds history to database
     return "redirect:information";
   }
 
@@ -159,7 +173,10 @@ public class PetClubController {
 
   @PostMapping("/tricks")
   public String updateTrick(@RequestParam String newTrick) {
-    petService.updateTricks(newTrick);
+    trickService.addTrick(petService.getCurrentPet().getName(), newTrick);
+    petService.getCurrentPet().setTricksUpdated(true);
+    historyService.addHistoryOfTricks(petService.getCurrentPet().getName(), newTrick);
+    // * adds trick to the database, sets condition for alert to true, adds history to database
     return "redirect:information";
   }
 

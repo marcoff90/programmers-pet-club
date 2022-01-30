@@ -1,9 +1,17 @@
 package com.greenfox.programmerspetclub.models.pet;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Unicorn extends Pet {
 
   public Unicorn(String name, String food, String drink) {
     super(name, food, drink);
+    this.description = name + " is the cutest of them all! Look at those fabulous colors!";
+    this.image = chooseImg();
+  }
+
+  public Unicorn() {
     this.description = name + " is the cutest of them all! Look at those fabulous colors!";
     this.image = chooseImg();
   }

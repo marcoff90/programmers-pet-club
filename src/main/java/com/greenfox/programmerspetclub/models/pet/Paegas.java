@@ -1,9 +1,18 @@
 package com.greenfox.programmerspetclub.models.pet;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Paegas extends Pet {
 
   public Paegas(String name, String food, String drink) {
     super(name, food, drink);
+    this.description = "If you wanna fly away from all your problems, " + name + " is here for you! "
+        + "Just jump up and let him take you to the wonderland!";
+    this.image = chooseImg();
+  }
+
+  public Paegas() {
     this.description = "If you wanna fly away from all your problems, " + name + " is here for you! "
         + "Just jump up and let him take you to the wonderland!";
     this.image = chooseImg();

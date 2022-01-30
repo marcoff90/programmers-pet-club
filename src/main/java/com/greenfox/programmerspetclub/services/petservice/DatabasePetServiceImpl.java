@@ -6,37 +6,26 @@ import com.greenfox.programmerspetclub.models.pet.Paegas;
 import com.greenfox.programmerspetclub.models.pet.Pet;
 import com.greenfox.programmerspetclub.models.pet.Unicorn;
 import com.greenfox.programmerspetclub.models.pet.Wolf;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
+import com.greenfox.programmerspetclub.repositories.PetRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PetServiceImpl implements PetService {
+public class DatabasePetServiceImpl implements PetService {
 
-  private List<Pet> pets;
+
+  private PetRepository petRepository;
   private Pet currentPet;
 
-  public PetServiceImpl() {
-    this.pets = new ArrayList<>();
-    pets.add(new Doggo("Lucas", "Ham", "Cola"));
-  }
-
-  @Override
-  public void setCurrentPet(Pet pet) {
-    this.currentPet = pet;
+  @Autowired
+  public DatabasePetServiceImpl(
+      PetRepository petRepository) {
+    this.petRepository = petRepository;
   }
 
   @Override
   public Pet getCurrentPet() {
-    return currentPet;
-  }
-
-  @Override
-  public List<Pet> getPets() {
-    return pets;
+    return this.currentPet;
   }
 
   @Override
@@ -60,7 +49,7 @@ public class PetServiceImpl implements PetService {
         pet = new Paegas(nameWithUpperCase, food, drink);
         break;
     }
-    pets.add(pet);
+    petRepository.save(pet);
     this.currentPet = pet;
     // * based on passed String type, the pet type is created, added to the list and set as a current pet -> when redirected to infomartion, the new
     // * pet is displayed
@@ -71,24 +60,12 @@ public class PetServiceImpl implements PetService {
     currentPet.setDrink(drink);
     currentPet.setFood(food);
     currentPet.setFoodUpdated(true);
-    currentPet.addHistory(getTimeAndDate() + " " + currentPet.getName() +
-        " changed his food & drink into " + food + " & drinks " + drink);
-  }
-
-  @Override
-  public void updateTricks(String newTrick) {
-    currentPet.addTrick(newTrick);
-    currentPet.setTricksUpdated(true);
-    currentPet.addHistory(getTimeAndDate() + " " + currentPet.getName() +
-        " has learned to " + newTrick);
+    petRepository.save(currentPet);
   }
 
   @Override
   public boolean isInDatabase(String name) {
-    if (name == null) {
-      return false;
-    }
-    return pets.stream().anyMatch(pet -> pet.getName().equalsIgnoreCase(name));
+    return name != null && petRepository.findById(name).isPresent();
   }
 
   @Override
@@ -96,21 +73,12 @@ public class PetServiceImpl implements PetService {
     currentPet.setCreated(false);
     currentPet.setTricksUpdated(false);
     currentPet.setFoodUpdated(false);
+    petRepository.save(currentPet);
   }
 
   @Override
   public Pet matchingPet(String name) {
-    Optional<Pet> matchingPet = pets.stream().filter(pet -> pet.getName().equalsIgnoreCase(name))
-        .findFirst();
-    currentPet = matchingPet.orElse(null);
-    return matchingPet.orElse(null);
-    // * when the user is logging in with pet, it checks if the pet is in the list and then sets it as a current pet
-  }
-
-  private String getTimeAndDate() {
-    String date = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-    return date.substring(6, 8) + "." + date.substring(4, 6) + "." + date.substring(0, 4) + " at "
-        + date.substring(9, 11) + ":" + date.substring(
-        11, 13);
+    currentPet = petRepository.findById(name).orElse(null);
+    return petRepository.findById(name).orElse(null);
   }
 }
