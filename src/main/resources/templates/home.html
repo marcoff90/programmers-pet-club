@@ -45,6 +45,9 @@
         <li th:if="${isInDatabase}" class="nav-item">
           <a class="nav-link mx-2" th:href="history">Action History</a>
         </li>
+        <li th:if="${isInDatabase}" class="nav-item">
+          <a class="nav-link mx-2" th:href="logout">Log Out</a>
+        </li>
       </ul>
     </div>
   </nav>

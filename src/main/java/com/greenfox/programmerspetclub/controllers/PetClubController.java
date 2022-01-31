@@ -179,6 +179,12 @@ public class PetClubController {
     return "redirect:information";
   }
 
+  @GetMapping("/logout")
+  public String logOut() {
+    userService.getUser().setLoggedIn(false);
+    return "redirect:home";
+  }
+
   private Model shouldUserSeeTheMenu(Model model) {
     model.addAttribute("isInDatabase", userService.getUser().isLoggedIn());
     // * if the user is logged in, the tricks, history, information and nutritionstore in menu bar are visible
