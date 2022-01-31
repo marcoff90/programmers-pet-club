@@ -11,4 +11,8 @@ public interface TrickService {
 
   List<Trick> getTricks(String name);
 
+  void setIsTrickLearned(boolean isTrickLearned);
+
+  boolean isTrickLearned();
+
 }

@@ -46,6 +46,11 @@
   </nav>
 
   <div class="row text-center justify-content-center mx-auto">
+    <div class="alert alert-danger" role="alert" th:if="${isTrickLearned}">
+      <strong th:text="${pet.getName()}">Pet name</strong> already knows this trick!
+    </div>
+
+  <div class="row text-center justify-content-center mx-auto">
     <div class="alert alert-light" role="alert" th:if="${pet.isTricksUpdated()}">
       <strong th:text="${pet.getName()}">Pet name</strong> now knows how to <strong
         th:text="${tricks.get(tricks.size() - 1)}"></strong>!
