@@ -15,10 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Controller
 public class PetClubController {
 
-  // TODO
-  // * when tricks are learned check, if it's already in the database under the pets name, if yes, don't add, show alert
-  // * don't add to history too
-
   private PetService petService;
   private UserService userService;
   private TrickService trickService;
@@ -70,6 +66,7 @@ public class PetClubController {
       } else {
         model.addAttribute("pet", petService.getCurrentPet());
         model.addAttribute("tricks", trickService.getTricks(petService.getCurrentPet().getName()));
+        model.addAttribute("isTrickLearned", trickService.isTrickLearned());
       }
       return "information";
     } else {
@@ -174,8 +171,10 @@ public class PetClubController {
   @PostMapping("/tricks")
   public String updateTrick(@RequestParam String newTrick) {
     trickService.addTrick(petService.getCurrentPet().getName(), newTrick);
-    petService.getCurrentPet().setTricksUpdated(true);
-    historyService.addHistoryOfTricks(petService.getCurrentPet().getName(), newTrick);
+    if (!trickService.isTrickLearned()) {
+      petService.getCurrentPet().setTricksUpdated(true);
+      historyService.addHistoryOfTricks(petService.getCurrentPet().getName(), newTrick);
+    }
     // * adds trick to the database, sets condition for alert to true, adds history to database
     return "redirect:information";
   }
@@ -193,6 +192,7 @@ public class PetClubController {
   private Model addPetToModel(Model model) {
     model.addAttribute("pet", petService.getCurrentPet());
     petService.resetBooleans();
+    trickService.setIsTrickLearned(false);
     userService.getUser().setRedirected(false);
     return model;
   }
